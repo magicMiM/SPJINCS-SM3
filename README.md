@@ -53,32 +53,41 @@ make test/spx PARAMS=sphincs-sm3-224f THASH=robust
 ./test/spx
 ```
 
-## Shorter experimental set: sphincs-sm3-224f-short
+## d*n-preserving set: sphincs-sm3-224f-dn
 
-For a more aggressive size/speed tradeoff, `sphincs-sm3-224f-short` keeps
-`n = 28` but changes:
-
-```text
-h = 64
-d = 16
-a = 8
-k = 33
-w = 256
-```
-
-This keeps height-4 subtrees and about `2^64` leaf capacity, uses the 192f FORS
-shape, and reduces WOTS length from 59 to 30.  The signature length is:
+`sphincs-sm3-224f-dn` follows the d*n preservation rule for the WOTS-layer
+term.  The SHA2-256f baseline has:
 
 ```text
-sig_bytes = 23576
+d * n = 17 * 32 = 544
 ```
 
-This is 26280 bytes shorter than `sphincs-sha2-256f`, or about 52.71%.  The
-tradeoff is speed: `w = 256` makes WOTS chains much longer than `w = 16`.
+After truncating to `n = 28`, choose `d = 20` so that:
+
+```text
+d * n = 20 * 28 = 560
+```
+
+This keeps `w = 16`; changing to `w = 256` is a separate size/speed tradeoff,
+not part of the hash-truncation argument.  The implementation still needs
+`h = d * t`, but the rule only asks to preserve `d*n`, not the original subtree
+height `t = 4`.  This set therefore uses `t = 3`.
+
+```text
+n = 28
+h = 60
+d = 20
+a = 9
+k = 35
+w = 16
+sig_bytes = 44548
+```
+
+This is 5308 bytes shorter than `sphincs-sha2-256f`, or about 10.65%.
 
 ```sh
 cd ref
 make clean
-make test/spx PARAMS=sphincs-sm3-224f-short THASH=robust
+make test/spx PARAMS=sphincs-sm3-224f-dn THASH=robust
 ./test/spx
 ```

@@ -4,18 +4,25 @@
 #define SPX_NAMESPACE(s) SPX_##s
 
 /*
- * Aggressive experimental SM3 parameter set.
+ * Experimental SM3 parameter set using the d*n preservation rule.
  *
- * Compared with sphincs-sm3-224f, this keeps n = 28 bytes but shortens the
- * signature by using w = 256, a 64-level hypertree split into height-4
- * subtrees, and the 192f FORS shape.  The tradeoff is slower WOTS processing.
+ * Starting from SHA2-256f, n is truncated from 32 to 28 bytes.  To keep the
+ * WOTS-layer security proxy d*n from decreasing, d is raised from 17 to 20:
+ *
+ *     17 * 32 = 544
+ *     20 * 28 = 560
+ *
+ * The Winternitz parameter remains w = 16; changing it to 256 is a separate
+ * size/speed tradeoff and is not part of this experiment.  The full height is
+ * set to h = d * 3, which keeps the implementation constraint while avoiding
+ * the extra length of preserving the original subtree height.
  */
 #define SPX_N 28
-#define SPX_FULL_HEIGHT 64
-#define SPX_D 16
-#define SPX_FORS_HEIGHT 8
-#define SPX_FORS_TREES 33
-#define SPX_WOTS_W 256
+#define SPX_FULL_HEIGHT 60
+#define SPX_D 20
+#define SPX_FORS_HEIGHT 9
+#define SPX_FORS_TREES 35
+#define SPX_WOTS_W 16
 
 #define SPX_ADDR_BYTES 32
 
