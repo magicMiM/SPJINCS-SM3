@@ -14,11 +14,10 @@
  *
  * The Winternitz parameter remains w = 16; changing it to 256 is a separate
  * size/speed tradeoff and is not part of this experiment.  The full height is
- * set to h = d * 3, which keeps the implementation constraint while avoiding
- * the extra length of preserving the original subtree height.
+ * the smallest multiple of d that is not below the original h = 68.
  */
 #define SPX_N 28
-#define SPX_FULL_HEIGHT 60
+#define SPX_FULL_HEIGHT 80
 #define SPX_D 20
 #define SPX_FORS_HEIGHT 9
 #define SPX_FORS_TREES 35

@@ -69,21 +69,21 @@ d * n = 20 * 28 = 560
 ```
 
 This keeps `w = 16`; changing to `w = 256` is a separate size/speed tradeoff,
-not part of the hash-truncation argument.  The implementation still needs
-`h = d * t`, but the rule only asks to preserve `d*n`, not the original subtree
-height `t = 4`.  This set therefore uses `t = 3`.
+not part of the hash-truncation argument.  The implementation needs
+`h` divisible by `d`.  To avoid reducing the hypertree height below the original
+`h = 68`, choose the smallest multiple of 20 that is at least 68: `h = 80`.
 
 ```text
 n = 28
-h = 60
+h = 80
 d = 20
 a = 9
 k = 35
 w = 16
-sig_bytes = 44548
+sig_bytes = 45108
 ```
 
-This is 5308 bytes shorter than `sphincs-sha2-256f`, or about 10.65%.
+This is 4748 bytes shorter than `sphincs-sha2-256f`, or about 9.52%.
 
 ```sh
 cd ref
